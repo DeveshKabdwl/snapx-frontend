@@ -1,0 +1,554 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SnapX - Shop Smarter, Earn Faster</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d69f2",
+                        "accent-teal": "#0ea5e9",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        #steps-container {
+            scroll-behavior: smooth;
+        }
+        #slider-trigger:checked ~ #steps-container {
+            transform: translateX(-20%);
+        }
+        #slider-trigger:checked ~ .slider-btn-right {
+            display: none;
+        }
+        #slider-trigger:checked ~ .slider-btn-left {
+            display: flex;
+        }
+        .hotspot {
+            @apply absolute w-5 h-5 bg-white/40 rounded-full border-2 border-white/80 shadow-lg flex items-center justify-center cursor-pointer transition-all z-20 hover:bg-white/60 hover:scale-110;
+        }
+        .hotspot::after {
+            content: '';
+            @apply w-2 h-2 bg-white rounded-full;
+        }
+        .hotspot-container:hover .hotspot-tooltip {
+            @apply opacity-100 scale-100 translate-y-0 pointer-events-auto;
+        }
+        .hotspot-tooltip {
+            @apply absolute bottom-full left-1/2 -translate-x-1/2 mb-4 w-max min-w-[200px] bg-white rounded-xl shadow-2xl p-3 flex items-center gap-3 opacity-0 scale-95 translate-y-2 pointer-events-none transition-all duration-300 z-30 border border-slate-100;
+        }
+        .hotspot-tooltip::after {
+            content: '';
+            @apply absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-white;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .blob-green {
+            background: #e6f7ef;
+            filter: blur(80px);
+            border-radius: 50%;
+        }
+        .blob-pink {
+            background: #fdf2f2;
+            filter: blur(80px);
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        }
+        .step-card {
+            width: calc((100% - 72px) / 4);
+            min-width: calc((1280px - 48px - 72px) / 4);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<nav class="sticky top-0 z-50 w-full bg-white dark:bg-background-dark border-b border-slate-200 dark:border-slate-800">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-8">
+<div class="flex items-center gap-2 shrink-0">
+<div class="bg-primary p-2 rounded-lg text-white">
+<span class="material-symbols-outlined text-2xl" style="">flash_on</span>
+</div>
+<span class="text-2xl font-black tracking-tight text-slate-900 dark:text-white" style="">SnapX</span>
+</div>
+<div class="flex-1 max-w-2xl hidden md:flex">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" style="">search</span>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-full py-3 pl-12 pr-4 text-sm focus:ring-2 focus:ring-primary/20 placeholder:text-slate-500 transition-all" placeholder="Search for any brand or product" type="text">
+</div>
+</div>
+<div class="flex items-center gap-8 shrink-0">
+<a class="hidden lg:block text-sm font-semibold hover:text-primary transition-colors" href="#" style="">Browser Extension</a>
+<div class="flex items-center gap-4">
+<button class="hidden sm:block text-sm font-bold px-6 py-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" style="">Log In</button>
+<button class="bg-primary text-white text-sm font-bold px-8 py-2.5 rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all" style="">Sign Up</button>
+</div>
+</div>
+</div>
+</nav>
+<header class="relative overflow-hidden min-h-[700px] flex items-center bg-white dark:bg-background-dark">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-0 items-center w-full">
+<div class="z-10 py-16 md:py-32 pr-12 text-left">
+<div class="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-6">
+<span class="material-symbols-outlined text-sm" style="">verified</span>
+<span class="text-xs font-bold uppercase tracking-widest leading-none" style="">Trusted by 2M+ Shoppers</span>
+</div>
+<h1 class="text-5xl lg:text-7xl font-black leading-[1.1] tracking-tight mb-8" style="">
+                Shop Smarter,<br>
+<span class="text-primary" style="">Earn Faster.</span>
+</h1>
+<p class="text-lg text-slate-600 dark:text-slate-400 mb-10 max-w-lg leading-relaxed" style="">
+                The simplest way to earn automatic cashback at the stores you love.<br>
+                Install our free browser extension and get rewarded every time you shop.
+            </p>
+<div class="flex flex-col sm:flex-row gap-3 max-w-md">
+<button class="bg-primary text-white font-bold px-10 py-4 rounded-full shadow-xl shadow-primary/30 hover:scale-105 transition-transform" style="">Add to Chrome – It’s Free</button>
+</div>
+</div>
+<div class="relative h-full min-h-[600px] lg:absolute lg:right-0 lg:top-0 lg:bottom-0 lg:w-1/2 overflow-hidden">
+<img alt="Two diverse friends laughing" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHS_TsK1usbwLFj4AVkpJMh1MZklsax3-dBB-sbwptZsKE8tmCbrZ4dpmSih0po2VlD_v2Tzdvnc24deu0Fyq1o-2iqgXnSZMsy9Eh0NkUCYtRIsLYTmtyeq55FNyRHaXGZxj4Tl9I8ja2QOS-gK4yqNhXM92T-K7oaQGBapPuFP3OXuEyt45H8f4x9OR_S8xY_jKQhbY1QweDC5xQSnK-bfe_vKtyQuNmj5ATouHXEjd2uMo9X8Ul1RxJCCqwvA_YMdXqXNkCWTpo" style="">
+<div class="hotspot-container absolute top-[64%] left-[28%]">
+<div class="hotspot"></div>
+<div class="hotspot-tooltip">
+<div class="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center p-1.5 shrink-0 overflow-hidden">
+<img alt="Brand Logo" class="w-full h-auto object-contain brightness-0 invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhfztt_3t05r9suC0r4Bs6HC4xtxL5CznffG9cMnhAiZ6aTDsq8BMaUoRLc3mboaRkQ0aOGqoXUTnPvRG3aQ795mWo56Eei72iuqJw1l0KWJ8c_LaXWoe4cP6vhWrma5ElEs4TFZs4SJqsI0iz0PhFNTx-1OknpIlbd-mloPIW6S53byviap-YODgKGB37pHQKKZjgmdGrHu98si3js9A9gCR5a3AmsCn0NLESFyLXCZBXhahK1mhioiWdf6eTvR0XUHflDaFmNHmv" style="">
+</div>
+<span class="text-sm font-bold text-slate-800" style="">₹1,500 Cash Back</span>
+</div>
+</div>
+<div class="hotspot-container absolute top-[38%] left-[24%]">
+<div class="hotspot"></div>
+<div class="hotspot-tooltip">
+<div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center p-1 shrink-0 overflow-hidden border border-slate-100">
+<img alt="Brand Logo" class="w-full h-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFkrhbdJkizhWsUKP5mP7Gs09fvVLBD0Srx-6ye7Akz-9UQsarzA4uAizrX7OvA0MbnKXmuLDSF7YOZXiNm4LWLsjDGjrcXwfF65ITu49XfEfe1zcowgWTtVHi8Vb4jjGAQy8ATe9d_9nuI6P-lBFzjJbJrFO8w3PtKBo_VJ6aSBiHa-MzhTvXImRKQTnZYXZlWubljwB7KSdiAERdtgEMS1BT3hrAF6PpcIzIjsCSQQtJwe7qd9-lilpE6E2S_8S9Ye5PhJSE-fEa" style="">
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 font-medium" style="">Apparel Item</span>
+<span class="text-sm font-bold text-slate-800" style="">₹600 Cash Back</span>
+</div>
+</div>
+</div>
+<div class="hotspot-container absolute top-[32%] left-[72%]">
+<div class="hotspot"></div>
+<div class="hotspot-tooltip">
+<div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center p-1 shrink-0 overflow-hidden border border-slate-100">
+<img alt="Brand Logo" class="w-full h-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq7XwcQVRAYCSiOAHQSX7mrOfxPiMAmE9Qw-TM5AP6sL2MC6YPaiX0dQVO4_7RV4bG2rZJ9cEwSbiIxW-KMQad0DZ4Na5lON4nTxue1bFu7M6JW5FQF9mqehatr4dB7cWwjFH10dlplSMc9zdtETW0BcbMCvX4vhrrPAD06GPv04vr0mTBb-KnAepRr38SPgeWY6PEc-5GbOCRK2ifxq9LAiqaLBWhJfzBdiIIyfXvtpGSElJH7bVVD9xOTVAlP71qzWOYBBi2Kma9" style="">
+</div>
+<div class="flex flex-col">
+<span class="text-xs text-slate-500 font-medium" style="">Style Collection</span>
+<span class="text-sm font-bold text-slate-800" style="">₹400 Cash Back</span>
+</div>
+</div>
+</div>
+<div class="absolute inset-0 bg-primary/5 mix-blend-multiply pointer-events-none"></div>
+</div>
+</div>
+</header>
+<section class="py-24 bg-white dark:bg-slate-900/50 overflow-hidden relative">
+<div class="max-w-7xl mx-auto px-6">
+<div class="mb-12">
+<h2 class="text-3xl md:text-4xl font-black mb-4" style="">How it Works</h2>
+<p class="text-slate-500 dark:text-slate-400" style="">Simple steps to start earning on every purchase</p>
+</div>
+<div class="relative">
+<input class="hidden peer" id="slider-trigger" type="checkbox">
+<div class="flex gap-6 transition-transform duration-500 ease-in-out pb-1 hide-scrollbar overflow-x-visible items-center" id="steps-container">
+<div class="step-card h-[220px] px-8 py-6 rounded-2xl border border-slate-100 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col items-center text-center justify-center transition-all hover:border-primary/30 shrink-0">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary shrink-0 mb-4">
+<span class="material-symbols-outlined text-2xl" style="">ads_click</span>
+</div>
+<div>
+<h3 class="text-base font-bold mb-2" style="">Visit SnapX First</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed max-w-[180px] mx-auto" style="">Open SnapX before you start your online shopping journey.</p>
+</div>
+</div>
+<div class="step-card h-[220px] px-8 py-6 rounded-2xl border border-slate-100 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col items-center text-center justify-center transition-all hover:border-primary/30 shrink-0">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary shrink-0 mb-4">
+<span class="material-symbols-outlined text-2xl" style="">storefront</span>
+</div>
+<div>
+<h3 class="text-base font-bold mb-2" style="">Select Brand</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed max-w-[180px] mx-auto" style="">Pick from 500+ top brands to activate exclusive deals.</p>
+</div>
+</div>
+<div class="step-card h-[220px] px-8 py-6 rounded-2xl border border-slate-100 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col items-center text-center justify-center transition-all hover:border-primary/30 shrink-0">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary shrink-0 mb-4">
+<span class="material-symbols-outlined text-2xl" style="">shopping_cart</span>
+</div>
+<div>
+<h3 class="text-base font-bold mb-2" style="">Shop as Usual</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed max-w-[180px] mx-auto" style="">Check out like you normally would on the official website.</p>
+</div>
+</div>
+<div class="step-card h-[220px] px-8 py-6 rounded-2xl border border-slate-100 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col items-center text-center justify-center transition-all hover:border-primary/30 shrink-0">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary shrink-0 mb-4">
+<span class="material-symbols-outlined text-2xl" style="">account_balance_wallet</span>
+</div>
+<div>
+<h3 class="text-base font-bold mb-2" style="">Get Cashback</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed max-w-[180px] mx-auto" style="">We track your order and credit your wallet instantly.</p>
+</div>
+</div>
+<div class="step-card h-[220px] px-8 py-6 rounded-2xl border border-slate-100 dark:border-slate-800 bg-background-light dark:bg-background-dark flex flex-col items-center text-center justify-center transition-all hover:border-primary/30 shrink-0">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary shrink-0 mb-4">
+<span class="material-symbols-outlined text-2xl" style="">payments</span>
+</div>
+<div>
+<h3 class="text-base font-bold mb-2" style="">5. Transfer Out</h3>
+<p class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed max-w-[180px] mx-auto" style="">Send cash to your bank or redeem for gift cards.</p>
+</div>
+</div>
+</div>
+<label class="slider-btn-right absolute -right-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center cursor-pointer hover:scale-110 transition-all border border-slate-100" for="slider-trigger" style="">
+<span class="material-symbols-outlined text-primary text-2xl font-bold" style="">chevron_right</span>
+</label>
+<label class="slider-btn-left absolute -left-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-white rounded-full shadow-xl items-center justify-center cursor-pointer hover:scale-110 transition-all border border-slate-100 hidden" for="slider-trigger" style="">
+<span class="material-symbols-outlined text-primary text-2xl font-bold" style="">chevron_left</span>
+</label>
+</div>
+</div>
+</section>
+<section class="py-24">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex items-center justify-between mb-12">
+<div>
+<h2 class="text-3xl md:text-4xl font-black mb-4" style="">Popular Games</h2>
+<p class="text-slate-500 dark:text-slate-400" style="">Level up your savings today</p>
+</div>
+<a class="text-primary font-bold flex items-center gap-2 group" href="#" style="">
+                View All
+                <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform" style="">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col group relative overflow-hidden transition-all hover:scale-[1.02]">
+<div class="w-full aspect-square bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center p-0 mb-6 overflow-hidden">
+<img alt="Game Icon" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDSZTG5AEOiTBcb4RIGSZ_FJX5pKNeWmxjaYozEsN_NRGGwwSq_iJdC2MPEWRjykeyaSqLI3W2seunzH8UlwBflOtIKkRHgE0vsRgRAGOoHnFTou2HZcA5XQp89p8VBB_xdWMIHTnYPy-mDWAf5QUh4EEEz1ohY0CPaBnGtmJXVVpuudb1iCniialfPmeMOusD08RzzZ-gGge8RKHp-af8pS5cyo3wUKDUQUWJaTyr-FZgOUJcr5AXQG91Vj_DsEBDl0uD-LFw3Fgw" style="">
+</div>
+<div class="mb-4">
+<h4 class="text-xl font-bold mb-1" style="">Mobile Legends</h4>
+<p class="text-accent-teal font-bold text-lg" style="">Up to 5% Back</p>
+</div>
+<div class="mt-auto opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<button class="w-full py-4 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40" style="">Top Up</button>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col group relative overflow-hidden transition-all hover:scale-[1.02]">
+<div class="w-full aspect-square bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center p-0 mb-6 overflow-hidden">
+<img alt="Game Icon" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq7XwcQVRAYCSiOAHQSX7mrOfxPiMAmE9Qw-TM5AP6sL2MC6YPaiX0dQVO4_7RV4bG2rZJ9cEwSbiIxW-KMQad0DZ4Na5lON4nTxue1bFu7M6JW5FQF9mqehatr4dB7cWwjFH10dlplSMc9zdtETW0BcbMCvX4vhrrPAD06GPv04vr0mTBb-KnAepRr38SPgeWY6PEc-5GbOCRK2ifxq9LAiqaLBWhJfzBdiIIyfXvtpGSElJH7bVVD9xOTVAlP71qzWOYBBi2Kma9" style="">
+</div>
+<div class="mb-4">
+<h4 class="text-xl font-bold mb-1" style="">Roblox</h4>
+<p class="text-accent-teal font-bold text-lg" style="">Up to 8% Back</p>
+</div>
+<div class="mt-auto opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<button class="w-full py-4 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40" style="">Top Up</button>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col group relative overflow-hidden transition-all hover:scale-[1.02]">
+<div class="w-full aspect-square bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center p-0 mb-6 overflow-hidden">
+<img alt="Game Icon" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhfztt_3t05r9suC0r4Bs6HC4xtxL5CznffG9cMnhAiZ6aTDsq8BMaUoRLc3mboaRkQ0aOGqoXUTnPvRG3aQ795mWo56Eei72iuqJw1l0KWJ8c_LaXWoe4cP6vhWrma5ElEs4TFZs4SJqsI0iz0PhFNTx-1OknpIlbd-mloPIW6S53byviap-YODgKGB37pHQKKZjgmdGrHu98si3js9A9gCR5a3AmsCn0NLESFyLXCZBXhahK1mhioiWdf6eTvR0XUHflDaFmNHmv" style="">
+</div>
+<div class="mb-4">
+<h4 class="text-xl font-bold mb-1" style="">Pubg</h4>
+<p class="text-accent-teal font-bold text-lg" style="">Up to 10% Back</p>
+</div>
+<div class="mt-auto opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<button class="w-full py-4 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40" style="">Top Up</button>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col group relative overflow-hidden transition-all hover:scale-[1.02]">
+<div class="w-full aspect-square bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center p-0 mb-6 overflow-hidden">
+<img alt="Game Icon" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFkrhbdJkizhWsUKP5mP7Gs09fvVLBD0Srx-6ye7Akz-9UQsarzA4uAizrX7OvA0MbnKXmuLDSF7YOZXiNm4LWLsjDGjrcXwfF65ITu49XfEfe1zcowgWTtVHi8Vb4jjGAQy8ATe9d_9nuI6P-lBFzjJbJrFO8w3PtKBo_VJ6aSBiHa-MzhTvXImRKQTnZYXZlWubljwB7KSdiAERdtgEMS1BT3hrAF6PpcIzIjsCSQQtJwe7qd9-lilpE6E2S_8S9Ye5PhJSE-fEa" style="">
+</div>
+<div class="mb-4">
+<h4 class="text-xl font-bold mb-1" style="">Valorant</h4>
+<p class="text-accent-teal font-bold text-lg" style="">Up to 15% Back</p>
+</div>
+<div class="mt-auto opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<button class="w-full py-4 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40" style="">Top Up</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-24">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex items-center justify-between mb-12">
+<div>
+<h2 class="text-3xl md:text-4xl font-black mb-4" style="">Popular Brand Offers</h2>
+<p class="text-slate-500 dark:text-slate-400" style="">Start saving at your favorite stores today</p>
+</div>
+<a class="text-primary font-bold flex items-center gap-2 group" href="#" style="">
+                View All
+                <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform" style="">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col group relative overflow-hidden transition-all hover:scale-[1.02]">
+<div class="absolute top-4 left-6 z-10">
+<span class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 text-[10px] font-bold rounded-lg uppercase tracking-wider" style="">SALE LIVE</span>
+</div>
+<div class="w-full aspect-square bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center p-8 mb-6 mt-4">
+<img alt="Brand Logo" class="w-full h-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDSZTG5AEOiTBcb4RIGSZ_FJX5pKNeWmxjaYozEsN_NRGGwwSq_iJdC2MPEWRjykeyaSqLI3W2seunzH8UlwBflOtIKkRHgE0vsRgRAGOoHnFTou2HZcA5XQp89p8VBB_xdWMIHTnYPy-mDWAf5QUh4EEEz1ohY0CPaBnGtmJXVVpuudb1iCniialfPmeMOusD08RzzZ-gGge8RKHp-af8pS5cyo3wUKDUQUWJaTyr-FZgOUJcr5AXQG91Vj_DsEBDl0uD-LFw3Fgw" style="">
+</div>
+<div class="mb-4">
+<h4 class="text-xl font-bold mb-1" style="">Global Store</h4>
+<p class="text-accent-teal font-bold text-lg" style="">Up to 10% Back</p>
+</div>
+<div class="mt-auto opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<button class="w-full py-4 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40" style="">Activate Deal</button>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col group relative overflow-hidden transition-all hover:scale-[1.02]">
+<div class="absolute top-4 left-6 z-10">
+<span class="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 text-[10px] font-bold rounded-lg uppercase tracking-wider" style="">NEW ADDED</span>
+</div>
+<div class="w-full aspect-square bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center p-8 mb-6 mt-4">
+<img alt="Brand Logo" class="w-full h-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq7XwcQVRAYCSiOAHQSX7mrOfxPiMAmE9Qw-TM5AP6sL2MC6YPaiX0dQVO4_7RV4bG2rZJ9cEwSbiIxW-KMQad0DZ4Na5lON4nTxue1bFu7M6JW5FQF9mqehatr4dB7cWwjFH10dlplSMc9zdtETW0BcbMCvX4vhrrPAD06GPv04vr0mTBb-KnAepRr38SPgeWY6PEc-5GbOCRK2ifxq9LAiqaLBWhJfzBdiIIyfXvtpGSElJH7bVVD9xOTVAlP71qzWOYBBi2Kma9" style="">
+</div>
+<div class="mb-4">
+<h4 class="text-xl font-bold mb-1" style="">Sportswear Co.</h4>
+<p class="text-accent-teal font-bold text-lg" style="">Up to 12% Back</p>
+</div>
+<div class="mt-auto opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<button class="w-full py-4 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40" style="">Activate Deal</button>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col group relative overflow-hidden transition-all hover:scale-[1.02]">
+<div class="absolute top-4 left-6 z-10">
+<span class="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 text-[10px] font-bold rounded-lg uppercase tracking-wider" style="">HIGH RATE</span>
+</div>
+<div class="w-full aspect-square bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center p-8 mb-6 mt-4">
+<img alt="Brand Logo" class="w-full h-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhfztt_3t05r9suC0r4Bs6HC4xtxL5CznffG9cMnhAiZ6aTDsq8BMaUoRLc3mboaRkQ0aOGqoXUTnPvRG3aQ795mWo56Eei72iuqJw1l0KWJ8c_LaXWoe4cP6vhWrma5ElEs4TFZs4SJqsI0iz0PhFNTx-1OknpIlbd-mloPIW6S53byviap-YODgKGB37pHQKKZjgmdGrHu98si3js9A9gCR5a3AmsCn0NLESFyLXCZBXhahK1mhioiWdf6eTvR0XUHflDaFmNHmv" style="">
+</div>
+<div class="mb-4">
+<h4 class="text-xl font-bold mb-1" style="">Tech Hub</h4>
+<p class="text-accent-teal font-bold text-lg" style="">Up to 8% Back</p>
+</div>
+<div class="mt-auto opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<button class="w-full py-4 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40" style="">Activate Deal</button>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none flex flex-col group relative overflow-hidden transition-all hover:scale-[1.02]">
+<div class="absolute top-4 left-6 z-10">
+<span class="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 text-[10px] font-bold rounded-lg uppercase tracking-wider" style="">50% OFF</span>
+</div>
+<div class="w-full aspect-square bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center p-8 mb-6 mt-4">
+<img alt="Brand Logo" class="w-full h-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFkrhbdJkizhWsUKP5mP7Gs09fvVLBD0Srx-6ye7Akz-9UQsarzA4uAizrX7OvA0MbnKXmuLDSF7YOZXiNm4LWLsjDGjrcXwfF65ITu49XfEfe1zcowgWTtVHi8Vb4jjGAQy8ATe9d_9nuI6P-lBFzjJbJrFO8w3PtKBo_VJ6aSBiHa-MzhTvXImRKQTnZYXZlWubljwB7KSdiAERdtgEMS1BT3hrAF6PpcIzIjsCSQQtJwe7qd9-lilpE6E2S_8S9Ye5PhJSE-fEa" style="">
+</div>
+<div class="mb-4">
+<h4 class="text-xl font-bold mb-1" style="">Lifestyle Brand</h4>
+<p class="text-accent-teal font-bold text-lg" style="">Up to 15% Back</p>
+</div>
+<div class="mt-auto opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<button class="w-full py-4 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40" style="">Activate Deal</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="py-32 px-6 bg-[#0d69f2] overflow-hidden relative">
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-center relative z-10">
+<div class="flex-shrink-0">
+<div class="w-[300px] lg:w-[320px] h-[620px] lg:h-[660px] bg-slate-900 rounded-[3.5rem] border-[12px] border-slate-800 shadow-2xl overflow-hidden relative ring-1 ring-slate-700/50 flex">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-slate-800 rounded-b-3xl z-30"></div>
+<div class="absolute inset-0 bg-white overflow-y-auto hide-scrollbar">
+<div class="px-4 pt-12 pb-4 sticky top-0 bg-white z-20">
+<div class="relative flex items-center bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 gap-3">
+<span class="material-symbols-outlined text-slate-400 text-xl" style="">search</span>
+<span class="text-slate-400 text-xs" style="">Search for brands</span>
+</div>
+</div>
+<div class="px-4 mb-6">
+<h5 class="text-sm font-bold text-slate-900 mb-3" style="">Top Categories</h5>
+<div class="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+<div class="flex flex-col items-center gap-1.5 shrink-0">
+<div class="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center overflow-hidden border border-orange-200">
+<div class="text-[8px] font-black text-orange-600 text-center leading-none uppercase" style="">Biggest<br>Sales</div>
+</div>
+<span class="text-[10px] font-medium text-slate-600" style="">Sales</span>
+</div>
+<div class="flex flex-col items-center gap-1.5 shrink-0">
+<div class="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100">
+<span class="material-symbols-outlined text-blue-600 text-xl" style="">credit_card</span>
+</div>
+<span class="text-[10px] font-medium text-slate-600" style="">Cards</span>
+</div>
+<div class="flex flex-col items-center gap-1.5 shrink-0">
+<div class="w-14 h-14 rounded-full bg-pink-50 flex items-center justify-center border border-pink-100">
+<span class="material-symbols-outlined text-pink-600 text-xl" style="">checkroom</span>
+</div>
+<span class="text-[10px] font-medium text-slate-600" style="">Fashion</span>
+</div>
+<div class="flex flex-col items-center gap-1.5 shrink-0">
+<div class="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center border border-green-100">
+<span class="material-symbols-outlined text-green-600 text-xl" style="">shopping_basket</span>
+</div>
+<span class="text-[10px] font-medium text-slate-600" style="">Grocery</span>
+</div>
+</div>
+</div>
+<div class="px-4 grid grid-cols-2 gap-3 pb-8">
+<div class="bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm flex flex-col">
+<div class="bg-pink-50 text-pink-600 text-[8px] font-bold py-1 text-center uppercase" style="">Sale Live Now</div>
+<div class="p-4 flex-1 flex items-center justify-center min-h-[80px]">
+<img alt="Brand" class="w-full h-auto object-contain max-h-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDSZTG5AEOiTBcb4RIGSZ_FJX5pKNeWmxjaYozEsN_NRGGwwSq_iJdC2MPEWRjykeyaSqLI3W2seunzH8UlwBflOtIKkRHgE0vsRgRAGOoHnFTou2HZcA5XQp89p8VBB_xdWMIHTnYPy-mDWAf5QUh4EEEz1ohY0CPaBnGtmJXVVpuudb1iCniialfPmeMOusD08RzzZ-gGge8RKHp-af8pS5cyo3wUKDUQUWJaTyr-FZgOUJcr5AXQG91Vj_DsEBDl0uD-LFw3Fgw" style="">
+</div>
+<div class="px-1.5 pb-1.5">
+<button class="w-full py-1.5 bg-primary text-white rounded-lg text-[9px] font-bold" style="">Upto 10% Cashback</button>
+</div>
+</div>
+<div class="bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm flex flex-col">
+<div class="bg-pink-50 text-pink-600 text-[8px] font-bold py-1 text-center uppercase" style="">Sale Live Now</div>
+<div class="p-4 flex-1 flex items-center justify-center min-h-[80px]">
+<img alt="Brand" class="w-full h-auto object-contain max-h-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq7XwcQVRAYCSiOAHQSX7mrOfxPiMAmE9Qw-TM5AP6sL2MC6YPaiX0dQVO4_7RV4bG2rZJ9cEwSbiIxW-KMQad0DZ4Na5lON4nTxue1bFu7M6JW5FQF9mqehatr4dB7cWwjFH10dlplSMc9zdtETW0BcbMCvX4vhrrPAD06GPv04vr0mTBb-KnAepRr38SPgeWY6PEc-5GbOCRK2ifxq9LAiqaLBWhJfzBdiIIyfXvtpGSElJH7bVVD9xOTVAlP71qzWOYBBi2Kma9" style="">
+</div>
+<div class="px-1.5 pb-1.5">
+<button class="w-full py-1.5 bg-primary text-white rounded-lg text-[9px] font-bold" style="">Upto 12% Cashback</button>
+</div>
+</div>
+</div>
+<div class="sticky bottom-0 bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center z-30">
+<div class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined text-lg" style="">home</span>
+</div>
+<div class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined text-lg" style="">group</span>
+</div>
+<div class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined text-lg" style="">account_balance_wallet</span>
+</div>
+<div class="flex flex-col items-center text-slate-400">
+<span class="material-symbols-outlined text-lg" style="">person</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-center lg:items-start text-center lg:text-left max-w-sm ml-[150px]">
+<div class="bg-white/20 p-4 rounded-3xl mb-6">
+<span class="material-symbols-outlined text-white text-4xl" style="">smartphone</span>
+</div>
+<h2 class="text-4xl lg:text-5xl font-black mb-4 tracking-tight text-white leading-[1.1]" style="">Lets SnapX</h2>
+<p class="text-white text-lg mb-8 leading-relaxed" style="">Shop your favorite brands and track your earnings anywhere, anytime.</p>
+<div class="bg-white p-6 rounded-3xl shadow-2xl shadow-black/10 border border-white/10 mb-8 relative overflow-hidden group w-fit">
+<div class="w-32 h-32 lg:w-40 lg:h-40 bg-slate-50 rounded-2xl flex items-center justify-center relative z-10 border border-slate-100 p-2">
+<svg class="w-full h-full text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 4v1m6 11h.01M9 20h.01M4 12h.01M4 15h.01M4 18h.01M12 11h.01M12 7h.01M12 15h.01M12 18h.01M12 21h.01M7 11h.01M7 15h.01M7 18h.01M7 21h.01M17 11h.01M17 15h.01M17 18h.01M17 21h.01M4 4h4v4H4V4zm0 0h4v4H4V4zm12 0h4v4h-4V4zm0 12h4v4h-4v-4zM4 16h4v4H4v-4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5"></path>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-7xl" style="">qr_code_2</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap justify-center lg:justify-start gap-4">
+<button class="bg-black text-white px-6 py-3.5 rounded-2xl flex items-center gap-3 hover:scale-105 transition-transform" style="">
+<span class="material-symbols-outlined text-xl" style="">ios</span>
+<div class="text-left">
+<p class="text-[9px] uppercase font-bold opacity-60" style="">App Store</p>
+</div>
+</button>
+<button class="bg-black text-white px-6 py-3.5 rounded-2xl flex items-center gap-3 hover:scale-105 transition-transform" style="">
+<span class="material-symbols-outlined text-xl" style="">play_arrow</span>
+<div class="text-left">
+<p class="text-[9px] uppercase font-bold opacity-60" style="">Google Play</p>
+</div>
+</button>
+</div>
+<p class="text-white text-sm mt-6 font-medium" style="">Scan to get the app</p>
+</div>
+</div>
+</section>
+<footer class="bg-background-light dark:bg-background-dark py-20 border-t border-slate-200 dark:border-slate-800">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-16">
+<div class="col-span-2 lg:col-span-2">
+<div class="flex items-center gap-2 mb-6">
+<div class="bg-primary p-1.5 rounded-lg text-white">
+<span class="material-symbols-outlined text-xl" style="">flash_on</span>
+</div>
+<span class="text-xl font-black tracking-tight" style="">SnapX</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 mb-8 max-w-sm" style="">
+                    Helping millions of shoppers save money and earn rewards every day with the world's most advanced cashback technology.
+                </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#" style="">
+<span class="material-symbols-outlined text-xl" style="">share</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#" style="">
+<span class="material-symbols-outlined text-xl" style="">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all" href="#" style="">
+<span class="material-symbols-outlined text-xl" style="">mail</span>
+</a>
+</div>
+</div>
+<div>
+<h5 class="font-bold mb-6" style="">Product</h5>
+<ul class="space-y-4 text-sm text-slate-500 dark:text-slate-400">
+<li class="" style=""><a class="hover:text-primary transition-colors" href="#" style="">Features</a></li>
+<li class="" style=""><a class="hover:text-primary transition-colors" href="#" style="">Merchant Portal</a></li>
+<li class="" style=""><a class="hover:text-primary transition-colors" href="#" style="">SnapX Wallet</a></li>
+<li class="" style=""><a class="hover:text-primary transition-colors" href="#" style="">Extension</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-6" style="">Company</h5>
+<ul class="space-y-4 text-sm text-slate-500 dark:text-slate-400">
+<li class="" style=""><a class="hover:text-primary transition-colors" href="#" style="">About Us</a></li>
+<li class="" style=""><a class="hover:text-primary transition-colors" href="#" style="">Careers</a></li>
+<li class="" style=""><a class="hover:text-primary transition-colors" href="#" style="">Press</a></li>
+<li class="" style=""><a class="hover:text-primary transition-colors" href="#" style="">Impact</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold mb-6" style="">Legal</h5>
+<ul class="space-y-4 text-sm text-slate-500 dark:text-slate-400">
+<li class="" style=""><a class="hover:text-primary transition-colors" href="#" style="">Privacy Policy</a></li>
+<li class="" style=""><a class="hover:text-primary transition-colors" href="#" style="">Terms of Service</a></li>
+<li class="" style=""><a class="hover:text-primary transition-colors" href="#" style="">Cookie Policy</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400">
+<p class="" style="">© 2026 SnapX Inc. All rights reserved.</p>
+<div class="flex items-center gap-6">
+<span class="flex items-center gap-1" style=""><span class="material-symbols-outlined text-sm" style="">language</span> English</span>
+<span class="flex items-center gap-1" style=""><span class="material-symbols-outlined text-sm" style="">payments</span> Local Currency</span>
+</div>
+</div>
+</div>
+</footer>
+
+</body></html>
